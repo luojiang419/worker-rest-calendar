@@ -166,9 +166,15 @@ jobs:
           gh release create $env:TAG $env:ASSET_PATH $env:CHECKSUM_PATH --draft --verify-tag=false --target $env:GITHUB_SHA --title "工作日历 $env:VERSION" --notes $notes
           if ($LASTEXITCODE -ne 0) { throw 'Draft Release creation failed.' }
           "created=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          $matches = @(gh api "repos/$env:GITHUB_REPOSITORY/releases?per_page=100" | ConvertFrom-Json | Where-Object {
-            $_.tag_name -eq $env:TAG -and $_.draft -and $_.target_commitish -eq $env:GITHUB_SHA
-          })
+          $matches = @()
+          for ($attempt = 1; $attempt -le 10; $attempt++) {
+            $matches = @(gh api "repos/$env:GITHUB_REPOSITORY/releases?per_page=100" | ConvertFrom-Json | Where-Object {
+              $_.tag_name -eq $env:TAG -and $_.draft -and $_.target_commitish -eq $env:GITHUB_SHA
+            })
+            if ($matches.Count -eq 1) { break }
+            if ($matches.Count -gt 1) { throw "Found duplicate drafts for $env:TAG." }
+            Start-Sleep -Seconds 2
+          }
           if ($matches.Count -ne 1) { throw "Expected one new draft, found $($matches.Count)." }
           "RELEASE_ID=$($matches[0].id)" | Out-File -FilePath $env:GITHUB_ENV -Append
           "release_id=$($matches[0].id)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
@@ -223,9 +229,14 @@ jobs:
         if: failure() && steps.create_release.outputs.created == 'true'
         shell: pwsh
         run: |
-          $matches = @(gh api "repos/$env:GITHUB_REPOSITORY/releases?per_page=100" | ConvertFrom-Json | Where-Object {
-            $_.tag_name -eq $env:TAG -and $_.draft -and $_.target_commitish -eq $env:GITHUB_SHA
-          })
+          $matches = @()
+          for ($attempt = 1; $attempt -le 10; $attempt++) {
+            $matches = @(gh api "repos/$env:GITHUB_REPOSITORY/releases?per_page=100" | ConvertFrom-Json | Where-Object {
+              $_.tag_name -eq $env:TAG -and $_.draft -and $_.target_commitish -eq $env:GITHUB_SHA
+            })
+            if ($matches.Count -ge 1) { break }
+            Start-Sleep -Seconds 2
+          }
           if ($matches.Count -eq 1) {
             gh api -X DELETE "repos/$env:GITHUB_REPOSITORY/releases/$($matches[0].id)"
           }
