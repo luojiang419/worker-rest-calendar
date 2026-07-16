@@ -83,7 +83,7 @@ bool RunInstaller(const std::wstring& installer,
   const std::wstring installer_log = log_path + L".installer.log";
   std::wstring command =
       Quote(installer) +
-      L" /SP- /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /NOCANCEL"
+      L" /SP- /SILENT /SUPPRESSMSGBOXES /NORESTART /NOCANCEL"
       L" /CLOSEAPPLICATIONS /FORCECLOSEAPPLICATIONS /DIR=" +
       Quote(install_directory) + L" /LOG=" + Quote(installer_log);
   STARTUPINFOW startup = {};
