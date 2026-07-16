@@ -1,0 +1,36 @@
+name: worker_rest_calendar
+publish_to: none
+description: 工作日历 starter blueprint
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  flutter_riverpod: any
+  go_router: any
+  drift: any
+  sqlite3_flutter_libs: any
+  path: any
+  path_provider: any
+  shared_preferences: any
+  uuid: any
+  timezone: any
+  flutter_local_notifications: any
+  window_manager: any
+  home_widget: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: any
+  build_runner: any
+  drift_dev: any
+
+flutter:
+  uses-material-design: true

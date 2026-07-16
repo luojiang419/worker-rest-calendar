@@ -1,0 +1,43 @@
+project:
+  id: worker_rest_calendar
+  display_name: 工作日历
+  blueprint_version: 1.0.0
+  primary_locale: zh_CN
+  week_start: monday
+  platforms:
+    - ios
+    - android
+    - macos
+    - windows
+
+product_rules:
+  big_week: saturday_and_sunday_rest
+  small_week: saturday_work_sunday_rest
+  precedence:
+    - manual_override
+    - holiday_override
+    - base_schedule_pattern
+
+architecture:
+  framework: flutter
+  language: dart
+  state_management: riverpod
+  routing: go_router
+  local_database: drift_sqlite
+  notification: flutter_local_notifications
+  desktop_window: window_manager
+  mobile_home_widget_bridge: home_widget_plus_native_code
+  optional_cloud_sync: supabase
+
+phases:
+  - 00_bootstrap
+  - 01_schedule_engine
+  - 02_local_data
+  - 03_design_system
+  - 04_onboarding_and_patterns
+  - 05_today_calendar_editor
+  - 06_notifications_and_stats
+  - 07_desktop_widget
+  - 08_mobile_home_widgets
+  - 09_sync_export_import
+  - 10_qa_release

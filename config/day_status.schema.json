@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DayStatusExport",
+  "type": "object",
+  "required": [
+    "date",
+    "plannedKind",
+    "effectiveKind"
+  ],
+  "properties": {
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "plannedKind": {
+      "enum": [
+        "work",
+        "rest"
+      ]
+    },
+    "effectiveKind": {
+      "enum": [
+        "work",
+        "rest",
+        "adjustedWork",
+        "adjustedRest",
+        "leave"
+      ]
+    },
+    "weekType": {
+      "enum": [
+        "big",
+        "small",
+        null
+      ]
+    },
+    "overtimeMinutes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 500
+    }
+  }
+}

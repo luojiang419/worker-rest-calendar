@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_surface">#FFFFFFFF</color>
+    <color name="widget_text_primary">#FF1D1D1F</color>
+    <color name="widget_text_secondary">#FF6E6E73</color>
+    <color name="widget_cell_surface">#FFF1F3F6</color>
+    <color name="widget_work">#FF74839A</color>
+    <color name="widget_rest">#FF38B889</color>
+    <color name="widget_adjusted_work">#FFF29A38</color>
+    <color name="widget_adjusted_rest">#FF26A69A</color>
+    <color name="widget_leave">#FF8E7CF0</color>
+
+    <color name="widget_surface_light">#FFFFFFFF</color>
+    <color name="widget_text_primary_light">#FF1D1D1F</color>
+    <color name="widget_text_secondary_light">#FF6E6E73</color>
+    <color name="widget_cell_surface_light">#FFF1F3F6</color>
+    <color name="widget_work_light">#FF74839A</color>
+    <color name="widget_rest_light">#FF38B889</color>
+    <color name="widget_adjusted_work_light">#FFF29A38</color>
+    <color name="widget_adjusted_rest_light">#FF26A69A</color>
+    <color name="widget_leave_light">#FF8E7CF0</color>
+
+    <color name="widget_surface_dark">#FF171C23</color>
+    <color name="widget_text_primary_dark">#FFF6F7F9</color>
+    <color name="widget_text_secondary_dark">#FFA8B0BB</color>
+    <color name="widget_cell_surface_dark">#FF252D38</color>
+    <color name="widget_work_dark">#FF94A3B8</color>
+    <color name="widget_rest_dark">#FF49D49B</color>
+    <color name="widget_adjusted_work_dark">#FFFFAD4D</color>
+    <color name="widget_adjusted_rest_dark">#FF36C2B4</color>
+    <color name="widget_leave_dark">#FFAA98FF</color>
+</resources>
