@@ -16,7 +16,9 @@
 
 ## 远端策略
 
-用户已确认使用公开仓库。当前本地仓库尚无 Git remote；实现和本地测试通过后创建 `luojiang419/worker-rest-calendar`，源码、Actions 与公开 Release 使用同一仓库。客户端不得内置 GitHub 令牌。
+用户已确认使用公开仓库。源码、Actions 与公开 Release 统一位于 `luojiang419/worker-rest-calendar`，本地 `main` 跟踪 `origin/main`。客户端不得内置 GitHub 令牌。
+
+首个更新基线版本为 `v0.1.11`，由 Actions run `29467745778` 构建并于 2026-07-16 正式发布；Release、标签与 `main` 均指向提交 `b36fd7ff55f52a013711f26c8d974618b5612593`。安装包资产大小为 12160858 字节，SHA-256 为 `eab8446c90388da419a7004b877733596748a50eb4983102ab352835cc847147`。
 
 ## 首次真实升级顺序
 
