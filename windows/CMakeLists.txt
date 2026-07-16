@@ -52,6 +52,7 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 # Application build; see runner/CMakeLists.txt.
 add_subdirectory("runner")
 add_subdirectory("updater")
+add_dependencies(${BINARY_NAME} worker_rest_calendar_updater)
 
 
 # Generated plugin build rules, which manage building the plugins and adding
