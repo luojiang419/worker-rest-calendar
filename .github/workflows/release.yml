@@ -115,7 +115,8 @@ jobs:
             if ((Get-Item -LiteralPath $file).Length -le 0) { throw "Empty runtime file: $file" }
           }
           $runtimeVersion = (Get-Item "$bundle/worker_rest_calendar.exe").VersionInfo.ProductVersion
-          if (-not $runtimeVersion.StartsWith("$env:VERSION.")) {
+          $expectedRuntimeVersion = "$env:VERSION+$env:BUILD_NUMBER"
+          if ($runtimeVersion -ne $expectedRuntimeVersion) {
             throw "Runtime version $runtimeVersion does not match $env:VERSION"
           }
 

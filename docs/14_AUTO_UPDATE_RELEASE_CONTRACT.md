@@ -4,7 +4,7 @@
 
 - 平台：Windows x64。
 - 正式版本：三段 SemVer，标签为 `vMAJOR.MINOR.PATCH`。
-- 当前版本来源：云端发布任务计算的 `VERSION`；同一值注入 Flutter build name、Inno Setup、标签和资产名。
+- 当前版本来源：云端发布任务计算的 `VERSION`；同一值注入 Flutter build name、Inno Setup、标签和资产名。Windows 文件 `ProductVersion` 按 Flutter 规则显示为 `{VERSION}+{buildNumber}`，客户端比较只使用 `VERSION`。
 - 公开源码与 Release 仓库：`luojiang419/worker-rest-calendar`。
 - Latest API：`https://api.github.com/repos/luojiang419/worker-rest-calendar/releases/latest`。
 - 安装包：`worker-rest-calendar-Setup-Windows-x64-v{version}.exe`。
