@@ -2431,6 +2431,19 @@ class $AppSettingsTable extends AppSettings
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _desktopWidgetTypeMeta = const VerificationMeta(
+    'desktopWidgetType',
+  );
+  @override
+  late final GeneratedColumn<String> desktopWidgetType =
+      GeneratedColumn<String>(
+        'desktop_widget_type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant('schedule'),
+      );
   static const VerificationMeta _desktopWidgetSizeMeta = const VerificationMeta(
     'desktopWidgetSize',
   );
@@ -2443,6 +2456,19 @@ class $AppSettingsTable extends AppSettings
         type: DriftSqlType.string,
         requiredDuringInsert: false,
         defaultValue: const Constant('small'),
+      );
+  static const VerificationMeta _desktopWidgetNoteMeta = const VerificationMeta(
+    'desktopWidgetNote',
+  );
+  @override
+  late final GeneratedColumn<String> desktopWidgetNote =
+      GeneratedColumn<String>(
+        'desktop_widget_note',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(''),
       );
   static const VerificationMeta _desktopWidgetLargeDateShapeMeta =
       const VerificationMeta('desktopWidgetLargeDateShape');
@@ -2543,7 +2569,9 @@ class $AppSettingsTable extends AppSettings
     visualStyle,
     locale,
     firstLaunchCompleted,
+    desktopWidgetType,
     desktopWidgetSize,
+    desktopWidgetNote,
     desktopWidgetLargeDateShape,
     desktopWidgetTodayHighlightStyle,
     desktopWidgetOpacity,
@@ -2597,12 +2625,30 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('desktop_widget_type')) {
+      context.handle(
+        _desktopWidgetTypeMeta,
+        desktopWidgetType.isAcceptableOrUnknown(
+          data['desktop_widget_type']!,
+          _desktopWidgetTypeMeta,
+        ),
+      );
+    }
     if (data.containsKey('desktop_widget_size')) {
       context.handle(
         _desktopWidgetSizeMeta,
         desktopWidgetSize.isAcceptableOrUnknown(
           data['desktop_widget_size']!,
           _desktopWidgetSizeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('desktop_widget_note')) {
+      context.handle(
+        _desktopWidgetNoteMeta,
+        desktopWidgetNote.isAcceptableOrUnknown(
+          data['desktop_widget_note']!,
+          _desktopWidgetNoteMeta,
         ),
       );
     }
@@ -2698,9 +2744,17 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.bool,
         data['${effectivePrefix}first_launch_completed'],
       )!,
+      desktopWidgetType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}desktop_widget_type'],
+      )!,
       desktopWidgetSize: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}desktop_widget_size'],
+      )!,
+      desktopWidgetNote: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}desktop_widget_note'],
       )!,
       desktopWidgetLargeDateShape: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -2745,7 +2799,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
   final String visualStyle;
   final String locale;
   final bool firstLaunchCompleted;
+  final String desktopWidgetType;
   final String desktopWidgetSize;
+  final String desktopWidgetNote;
   final String desktopWidgetLargeDateShape;
   final String desktopWidgetTodayHighlightStyle;
   final double desktopWidgetOpacity;
@@ -2759,7 +2815,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     required this.visualStyle,
     required this.locale,
     required this.firstLaunchCompleted,
+    required this.desktopWidgetType,
     required this.desktopWidgetSize,
+    required this.desktopWidgetNote,
     required this.desktopWidgetLargeDateShape,
     required this.desktopWidgetTodayHighlightStyle,
     required this.desktopWidgetOpacity,
@@ -2776,7 +2834,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     map['visual_style'] = Variable<String>(visualStyle);
     map['locale'] = Variable<String>(locale);
     map['first_launch_completed'] = Variable<bool>(firstLaunchCompleted);
+    map['desktop_widget_type'] = Variable<String>(desktopWidgetType);
     map['desktop_widget_size'] = Variable<String>(desktopWidgetSize);
+    map['desktop_widget_note'] = Variable<String>(desktopWidgetNote);
     map['desktop_widget_large_date_shape'] = Variable<String>(
       desktopWidgetLargeDateShape,
     );
@@ -2800,7 +2860,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       visualStyle: Value(visualStyle),
       locale: Value(locale),
       firstLaunchCompleted: Value(firstLaunchCompleted),
+      desktopWidgetType: Value(desktopWidgetType),
       desktopWidgetSize: Value(desktopWidgetSize),
+      desktopWidgetNote: Value(desktopWidgetNote),
       desktopWidgetLargeDateShape: Value(desktopWidgetLargeDateShape),
       desktopWidgetTodayHighlightStyle: Value(desktopWidgetTodayHighlightStyle),
       desktopWidgetOpacity: Value(desktopWidgetOpacity),
@@ -2824,7 +2886,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       firstLaunchCompleted: serializer.fromJson<bool>(
         json['firstLaunchCompleted'],
       ),
+      desktopWidgetType: serializer.fromJson<String>(json['desktopWidgetType']),
       desktopWidgetSize: serializer.fromJson<String>(json['desktopWidgetSize']),
+      desktopWidgetNote: serializer.fromJson<String>(json['desktopWidgetNote']),
       desktopWidgetLargeDateShape: serializer.fromJson<String>(
         json['desktopWidgetLargeDateShape'],
       ),
@@ -2857,7 +2921,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       'visualStyle': serializer.toJson<String>(visualStyle),
       'locale': serializer.toJson<String>(locale),
       'firstLaunchCompleted': serializer.toJson<bool>(firstLaunchCompleted),
+      'desktopWidgetType': serializer.toJson<String>(desktopWidgetType),
       'desktopWidgetSize': serializer.toJson<String>(desktopWidgetSize),
+      'desktopWidgetNote': serializer.toJson<String>(desktopWidgetNote),
       'desktopWidgetLargeDateShape': serializer.toJson<String>(
         desktopWidgetLargeDateShape,
       ),
@@ -2880,7 +2946,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     String? visualStyle,
     String? locale,
     bool? firstLaunchCompleted,
+    String? desktopWidgetType,
     String? desktopWidgetSize,
+    String? desktopWidgetNote,
     String? desktopWidgetLargeDateShape,
     String? desktopWidgetTodayHighlightStyle,
     double? desktopWidgetOpacity,
@@ -2894,7 +2962,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     visualStyle: visualStyle ?? this.visualStyle,
     locale: locale ?? this.locale,
     firstLaunchCompleted: firstLaunchCompleted ?? this.firstLaunchCompleted,
+    desktopWidgetType: desktopWidgetType ?? this.desktopWidgetType,
     desktopWidgetSize: desktopWidgetSize ?? this.desktopWidgetSize,
+    desktopWidgetNote: desktopWidgetNote ?? this.desktopWidgetNote,
     desktopWidgetLargeDateShape:
         desktopWidgetLargeDateShape ?? this.desktopWidgetLargeDateShape,
     desktopWidgetTodayHighlightStyle:
@@ -2919,9 +2989,15 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
       firstLaunchCompleted: data.firstLaunchCompleted.present
           ? data.firstLaunchCompleted.value
           : this.firstLaunchCompleted,
+      desktopWidgetType: data.desktopWidgetType.present
+          ? data.desktopWidgetType.value
+          : this.desktopWidgetType,
       desktopWidgetSize: data.desktopWidgetSize.present
           ? data.desktopWidgetSize.value
           : this.desktopWidgetSize,
+      desktopWidgetNote: data.desktopWidgetNote.present
+          ? data.desktopWidgetNote.value
+          : this.desktopWidgetNote,
       desktopWidgetLargeDateShape: data.desktopWidgetLargeDateShape.present
           ? data.desktopWidgetLargeDateShape.value
           : this.desktopWidgetLargeDateShape,
@@ -2955,7 +3031,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
           ..write('visualStyle: $visualStyle, ')
           ..write('locale: $locale, ')
           ..write('firstLaunchCompleted: $firstLaunchCompleted, ')
+          ..write('desktopWidgetType: $desktopWidgetType, ')
           ..write('desktopWidgetSize: $desktopWidgetSize, ')
+          ..write('desktopWidgetNote: $desktopWidgetNote, ')
           ..write('desktopWidgetLargeDateShape: $desktopWidgetLargeDateShape, ')
           ..write(
             'desktopWidgetTodayHighlightStyle: $desktopWidgetTodayHighlightStyle, ',
@@ -2976,7 +3054,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
     visualStyle,
     locale,
     firstLaunchCompleted,
+    desktopWidgetType,
     desktopWidgetSize,
+    desktopWidgetNote,
     desktopWidgetLargeDateShape,
     desktopWidgetTodayHighlightStyle,
     desktopWidgetOpacity,
@@ -2994,7 +3074,9 @@ class AppSettingsRow extends DataClass implements Insertable<AppSettingsRow> {
           other.visualStyle == this.visualStyle &&
           other.locale == this.locale &&
           other.firstLaunchCompleted == this.firstLaunchCompleted &&
+          other.desktopWidgetType == this.desktopWidgetType &&
           other.desktopWidgetSize == this.desktopWidgetSize &&
+          other.desktopWidgetNote == this.desktopWidgetNote &&
           other.desktopWidgetLargeDateShape ==
               this.desktopWidgetLargeDateShape &&
           other.desktopWidgetTodayHighlightStyle ==
@@ -3012,7 +3094,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
   final Value<String> visualStyle;
   final Value<String> locale;
   final Value<bool> firstLaunchCompleted;
+  final Value<String> desktopWidgetType;
   final Value<String> desktopWidgetSize;
+  final Value<String> desktopWidgetNote;
   final Value<String> desktopWidgetLargeDateShape;
   final Value<String> desktopWidgetTodayHighlightStyle;
   final Value<double> desktopWidgetOpacity;
@@ -3026,7 +3110,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     this.visualStyle = const Value.absent(),
     this.locale = const Value.absent(),
     this.firstLaunchCompleted = const Value.absent(),
+    this.desktopWidgetType = const Value.absent(),
     this.desktopWidgetSize = const Value.absent(),
+    this.desktopWidgetNote = const Value.absent(),
     this.desktopWidgetLargeDateShape = const Value.absent(),
     this.desktopWidgetTodayHighlightStyle = const Value.absent(),
     this.desktopWidgetOpacity = const Value.absent(),
@@ -3041,7 +3127,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     this.visualStyle = const Value.absent(),
     this.locale = const Value.absent(),
     this.firstLaunchCompleted = const Value.absent(),
+    this.desktopWidgetType = const Value.absent(),
     this.desktopWidgetSize = const Value.absent(),
+    this.desktopWidgetNote = const Value.absent(),
     this.desktopWidgetLargeDateShape = const Value.absent(),
     this.desktopWidgetTodayHighlightStyle = const Value.absent(),
     this.desktopWidgetOpacity = const Value.absent(),
@@ -3056,7 +3144,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     Expression<String>? visualStyle,
     Expression<String>? locale,
     Expression<bool>? firstLaunchCompleted,
+    Expression<String>? desktopWidgetType,
     Expression<String>? desktopWidgetSize,
+    Expression<String>? desktopWidgetNote,
     Expression<String>? desktopWidgetLargeDateShape,
     Expression<String>? desktopWidgetTodayHighlightStyle,
     Expression<double>? desktopWidgetOpacity,
@@ -3072,7 +3162,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
       if (locale != null) 'locale': locale,
       if (firstLaunchCompleted != null)
         'first_launch_completed': firstLaunchCompleted,
+      if (desktopWidgetType != null) 'desktop_widget_type': desktopWidgetType,
       if (desktopWidgetSize != null) 'desktop_widget_size': desktopWidgetSize,
+      if (desktopWidgetNote != null) 'desktop_widget_note': desktopWidgetNote,
       if (desktopWidgetLargeDateShape != null)
         'desktop_widget_large_date_shape': desktopWidgetLargeDateShape,
       if (desktopWidgetTodayHighlightStyle != null)
@@ -3097,7 +3189,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
     Value<String>? visualStyle,
     Value<String>? locale,
     Value<bool>? firstLaunchCompleted,
+    Value<String>? desktopWidgetType,
     Value<String>? desktopWidgetSize,
+    Value<String>? desktopWidgetNote,
     Value<String>? desktopWidgetLargeDateShape,
     Value<String>? desktopWidgetTodayHighlightStyle,
     Value<double>? desktopWidgetOpacity,
@@ -3112,7 +3206,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
       visualStyle: visualStyle ?? this.visualStyle,
       locale: locale ?? this.locale,
       firstLaunchCompleted: firstLaunchCompleted ?? this.firstLaunchCompleted,
+      desktopWidgetType: desktopWidgetType ?? this.desktopWidgetType,
       desktopWidgetSize: desktopWidgetSize ?? this.desktopWidgetSize,
+      desktopWidgetNote: desktopWidgetNote ?? this.desktopWidgetNote,
       desktopWidgetLargeDateShape:
           desktopWidgetLargeDateShape ?? this.desktopWidgetLargeDateShape,
       desktopWidgetTodayHighlightStyle:
@@ -3148,8 +3244,14 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
         firstLaunchCompleted.value,
       );
     }
+    if (desktopWidgetType.present) {
+      map['desktop_widget_type'] = Variable<String>(desktopWidgetType.value);
+    }
     if (desktopWidgetSize.present) {
       map['desktop_widget_size'] = Variable<String>(desktopWidgetSize.value);
+    }
+    if (desktopWidgetNote.present) {
+      map['desktop_widget_note'] = Variable<String>(desktopWidgetNote.value);
     }
     if (desktopWidgetLargeDateShape.present) {
       map['desktop_widget_large_date_shape'] = Variable<String>(
@@ -3193,7 +3295,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSettingsRow> {
           ..write('visualStyle: $visualStyle, ')
           ..write('locale: $locale, ')
           ..write('firstLaunchCompleted: $firstLaunchCompleted, ')
+          ..write('desktopWidgetType: $desktopWidgetType, ')
           ..write('desktopWidgetSize: $desktopWidgetSize, ')
+          ..write('desktopWidgetNote: $desktopWidgetNote, ')
           ..write('desktopWidgetLargeDateShape: $desktopWidgetLargeDateShape, ')
           ..write(
             'desktopWidgetTodayHighlightStyle: $desktopWidgetTodayHighlightStyle, ',
@@ -5170,7 +5274,9 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<String> visualStyle,
       Value<String> locale,
       Value<bool> firstLaunchCompleted,
+      Value<String> desktopWidgetType,
       Value<String> desktopWidgetSize,
+      Value<String> desktopWidgetNote,
       Value<String> desktopWidgetLargeDateShape,
       Value<String> desktopWidgetTodayHighlightStyle,
       Value<double> desktopWidgetOpacity,
@@ -5186,7 +5292,9 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<String> visualStyle,
       Value<String> locale,
       Value<bool> firstLaunchCompleted,
+      Value<String> desktopWidgetType,
       Value<String> desktopWidgetSize,
+      Value<String> desktopWidgetNote,
       Value<String> desktopWidgetLargeDateShape,
       Value<String> desktopWidgetTodayHighlightStyle,
       Value<double> desktopWidgetOpacity,
@@ -5230,8 +5338,18 @@ class $$AppSettingsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get desktopWidgetType => $composableBuilder(
+    column: $table.desktopWidgetType,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get desktopWidgetSize => $composableBuilder(
     column: $table.desktopWidgetSize,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get desktopWidgetNote => $composableBuilder(
+    column: $table.desktopWidgetNote,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5306,8 +5424,18 @@ class $$AppSettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get desktopWidgetType => $composableBuilder(
+    column: $table.desktopWidgetType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get desktopWidgetSize => $composableBuilder(
     column: $table.desktopWidgetSize,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get desktopWidgetNote => $composableBuilder(
+    column: $table.desktopWidgetNote,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -5376,8 +5504,18 @@ class $$AppSettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get desktopWidgetType => $composableBuilder(
+    column: $table.desktopWidgetType,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get desktopWidgetSize => $composableBuilder(
     column: $table.desktopWidgetSize,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get desktopWidgetNote => $composableBuilder(
+    column: $table.desktopWidgetNote,
     builder: (column) => column,
   );
 
@@ -5454,7 +5592,9 @@ class $$AppSettingsTableTableManager
                 Value<String> visualStyle = const Value.absent(),
                 Value<String> locale = const Value.absent(),
                 Value<bool> firstLaunchCompleted = const Value.absent(),
+                Value<String> desktopWidgetType = const Value.absent(),
                 Value<String> desktopWidgetSize = const Value.absent(),
+                Value<String> desktopWidgetNote = const Value.absent(),
                 Value<String> desktopWidgetLargeDateShape =
                     const Value.absent(),
                 Value<String> desktopWidgetTodayHighlightStyle =
@@ -5470,7 +5610,9 @@ class $$AppSettingsTableTableManager
                 visualStyle: visualStyle,
                 locale: locale,
                 firstLaunchCompleted: firstLaunchCompleted,
+                desktopWidgetType: desktopWidgetType,
                 desktopWidgetSize: desktopWidgetSize,
+                desktopWidgetNote: desktopWidgetNote,
                 desktopWidgetLargeDateShape: desktopWidgetLargeDateShape,
                 desktopWidgetTodayHighlightStyle:
                     desktopWidgetTodayHighlightStyle,
@@ -5487,7 +5629,9 @@ class $$AppSettingsTableTableManager
                 Value<String> visualStyle = const Value.absent(),
                 Value<String> locale = const Value.absent(),
                 Value<bool> firstLaunchCompleted = const Value.absent(),
+                Value<String> desktopWidgetType = const Value.absent(),
                 Value<String> desktopWidgetSize = const Value.absent(),
+                Value<String> desktopWidgetNote = const Value.absent(),
                 Value<String> desktopWidgetLargeDateShape =
                     const Value.absent(),
                 Value<String> desktopWidgetTodayHighlightStyle =
@@ -5503,7 +5647,9 @@ class $$AppSettingsTableTableManager
                 visualStyle: visualStyle,
                 locale: locale,
                 firstLaunchCompleted: firstLaunchCompleted,
+                desktopWidgetType: desktopWidgetType,
                 desktopWidgetSize: desktopWidgetSize,
+                desktopWidgetNote: desktopWidgetNote,
                 desktopWidgetLargeDateShape: desktopWidgetLargeDateShape,
                 desktopWidgetTodayHighlightStyle:
                     desktopWidgetTodayHighlightStyle,

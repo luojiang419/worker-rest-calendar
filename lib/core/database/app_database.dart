@@ -17,7 +17,7 @@ final class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -56,6 +56,10 @@ final class AppDatabase extends _$AppDatabase {
       }
       if (from >= 2 && from < 7) {
         await migrator.addColumn(appSettings, appSettings.calendarScrollAxis);
+      }
+      if (from >= 2 && from < 8) {
+        await migrator.addColumn(appSettings, appSettings.desktopWidgetType);
+        await migrator.addColumn(appSettings, appSettings.desktopWidgetNote);
       }
     },
     beforeOpen: (details) async {

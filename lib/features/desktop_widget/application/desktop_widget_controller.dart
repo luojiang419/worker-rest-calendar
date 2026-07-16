@@ -131,6 +131,15 @@ final class DesktopWidgetController extends AsyncNotifier<DesktopWidgetState> {
     if (!state.requireValue.showFullApp) await _window.showWidget(value);
   }
 
+  Future<void> setType(DesktopWidgetType value) => _updatePreferences(
+    state.requireValue.preferences.copyWith(desktopWidgetType: value),
+  );
+
+  Future<void> setNote(String value) => _updatePreferences(
+    state.requireValue.preferences.copyWith(desktopWidgetNote: value),
+    refreshTray: false,
+  );
+
   Future<void> setLargeDateShape(DesktopWidgetLargeDateShape value) =>
       _updatePreferences(
         state.requireValue.preferences.copyWith(
@@ -282,11 +291,14 @@ final class DesktopWidgetController extends AsyncNotifier<DesktopWidgetState> {
     }
   }
 
-  Future<void> _updatePreferences(AppPreferences preferences) async {
+  Future<void> _updatePreferences(
+    AppPreferences preferences, {
+    bool refreshTray = true,
+  }) async {
     await ref.read(settingsRepositoryProvider).saveAppPreferences(preferences);
     state = AsyncData(state.requireValue.copyWith(preferences: preferences));
     ref.invalidate(appPreferencesProvider);
-    if (!state.requireValue.showFullApp) {
+    if (refreshTray && !state.requireValue.showFullApp) {
       await _tray.updateContextMenu(preferences);
     }
   }
@@ -308,6 +320,14 @@ final class DesktopWidgetController extends AsyncNotifier<DesktopWidgetState> {
         await openFullApp(destination: HomeNavigationTarget.dataManagement);
       case DesktopWidgetMenuAction.showWidget:
         await returnToWidget();
+      case DesktopWidgetMenuAction.typeSchedule:
+        await setType(DesktopWidgetType.schedule);
+      case DesktopWidgetMenuAction.typeClock:
+        await setType(DesktopWidgetType.clock);
+      case DesktopWidgetMenuAction.typeNote:
+        await setType(DesktopWidgetType.note);
+      case DesktopWidgetMenuAction.typeFocus:
+        await setType(DesktopWidgetType.focus);
       case DesktopWidgetMenuAction.small:
         await setSize(DesktopWidgetSize.small);
       case DesktopWidgetMenuAction.medium:

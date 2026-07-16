@@ -48,6 +48,8 @@ void main() {
 
     await tray.select(DesktopWidgetMenuAction.visualGlass);
     await tray.select(DesktopWidgetMenuAction.themeDark);
+    await tray.select(DesktopWidgetMenuAction.typeNote);
+    await controller.setNote('桌面便笺');
     expect(container.read(visualStyleProvider), AppVisualStyle.glass);
     expect(container.read(themeModeProvider), ThemeMode.dark);
     await controller.setSize(DesktopWidgetSize.large);
@@ -60,6 +62,8 @@ void main() {
 
     var stored = await repository.getAppPreferences();
     expect(stored.desktopWidgetSize, DesktopWidgetSize.large);
+    expect(stored.desktopWidgetType, DesktopWidgetType.note);
+    expect(stored.desktopWidgetNote, '桌面便笺');
     expect(
       stored.desktopWidgetLargeDateShape,
       DesktopWidgetLargeDateShape.circle,

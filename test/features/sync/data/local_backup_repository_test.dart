@@ -39,6 +39,8 @@ void main() {
       const AppPreferences(
         themeMode: AppThemePreference.dark,
         visualStyle: AppVisualStyle.glass,
+        desktopWidgetType: DesktopWidgetType.note,
+        desktopWidgetNote: '备份中的便笺',
         desktopWidgetLargeDateShape: DesktopWidgetLargeDateShape.circle,
         desktopWidgetTodayHighlightStyle:
             DesktopWidgetTodayHighlightStyle.filled,
@@ -59,6 +61,8 @@ void main() {
     expect(parsed.overrides.single.id, 'override-1');
     expect(parsed.appSettings.themeMode, AppThemePreference.dark);
     expect(parsed.appSettings.visualStyle, AppVisualStyle.glass);
+    expect(parsed.appSettings.desktopWidgetType, DesktopWidgetType.note);
+    expect(parsed.appSettings.desktopWidgetNote, '备份中的便笺');
     expect(
       parsed.appSettings.desktopWidgetLargeDateShape,
       DesktopWidgetLargeDateShape.circle,
@@ -102,6 +106,22 @@ void main() {
     expect(
       backups.parseJson(legacyScrollAxisJson).appSettings.calendarScrollAxis,
       CalendarScrollAxis.horizontal,
+    );
+    final legacyWidgetTypeJson = json.replaceFirst(
+      '"desktopWidgetType":"note",',
+      '',
+    );
+    expect(
+      backups.parseJson(legacyWidgetTypeJson).appSettings.desktopWidgetType,
+      DesktopWidgetType.schedule,
+    );
+    final legacyWidgetNoteJson = json.replaceFirst(
+      '"desktopWidgetNote":"备份中的便笺",',
+      '',
+    );
+    expect(
+      backups.parseJson(legacyWidgetNoteJson).appSettings.desktopWidgetNote,
+      isEmpty,
     );
     expect(parsed.reminderSettings.dailyNextDayEnabled, isTrue);
   });

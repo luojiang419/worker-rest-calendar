@@ -215,7 +215,9 @@ final class BackupCodec {
     'visualStyle': settings.visualStyle.name,
     'locale': settings.locale,
     'firstLaunchCompleted': settings.firstLaunchCompleted,
+    'desktopWidgetType': settings.desktopWidgetType.name,
     'desktopWidgetSize': settings.desktopWidgetSize.name,
+    'desktopWidgetNote': settings.desktopWidgetNote,
     'desktopWidgetLargeDateShape': settings.desktopWidgetLargeDateShape.name,
     'desktopWidgetTodayHighlightStyle':
         settings.desktopWidgetTodayHighlightStyle.name,
@@ -241,9 +243,23 @@ final class BackupCodec {
           json['firstLaunchCompleted'],
           'appSettings.firstLaunchCompleted',
         ),
+        desktopWidgetType: json['desktopWidgetType'] == null
+            ? DesktopWidgetType.schedule
+            : DesktopWidgetType.values.byName(
+                _asString(
+                  json['desktopWidgetType'],
+                  'appSettings.desktopWidgetType',
+                ),
+              ),
         desktopWidgetSize: DesktopWidgetSize.values.byName(
           _asString(json['desktopWidgetSize'], 'appSettings.desktopWidgetSize'),
         ),
+        desktopWidgetNote: json['desktopWidgetNote'] == null
+            ? ''
+            : _asString(
+                json['desktopWidgetNote'],
+                'appSettings.desktopWidgetNote',
+              ),
         desktopWidgetLargeDateShape: json['desktopWidgetLargeDateShape'] == null
             ? DesktopWidgetLargeDateShape.roundedRectangle
             : DesktopWidgetLargeDateShape.values.byName(

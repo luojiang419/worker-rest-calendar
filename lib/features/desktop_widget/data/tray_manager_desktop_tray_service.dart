@@ -137,6 +137,28 @@ Menu desktopWidgetContextMenu(AppPreferences preferences) => Menu(
     ]),
     MenuItem(key: DesktopWidgetMenuAction.showWidget.name, label: '显示桌面摆件'),
     MenuItem.separator(),
+    _submenu('摆件类型', [
+      _checked(
+        DesktopWidgetMenuAction.typeSchedule,
+        '排班日历',
+        preferences.desktopWidgetType == DesktopWidgetType.schedule,
+      ),
+      _checked(
+        DesktopWidgetMenuAction.typeClock,
+        '精致时钟',
+        preferences.desktopWidgetType == DesktopWidgetType.clock,
+      ),
+      _checked(
+        DesktopWidgetMenuAction.typeNote,
+        '快速记事本',
+        preferences.desktopWidgetType == DesktopWidgetType.note,
+      ),
+      _checked(
+        DesktopWidgetMenuAction.typeFocus,
+        '专注计时器',
+        preferences.desktopWidgetType == DesktopWidgetType.focus,
+      ),
+    ]),
     _submenu('摆件尺寸', [
       _checked(
         DesktopWidgetMenuAction.small,

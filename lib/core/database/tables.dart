@@ -87,8 +87,11 @@ class AppSettings extends Table {
   TextColumn get locale => text().withDefault(const Constant('zh_CN'))();
   BoolColumn get firstLaunchCompleted =>
       boolean().withDefault(const Constant(false))();
+  TextColumn get desktopWidgetType =>
+      text().withDefault(const Constant('schedule'))();
   TextColumn get desktopWidgetSize =>
       text().withDefault(const Constant('small'))();
+  TextColumn get desktopWidgetNote => text().withDefault(const Constant(''))();
   TextColumn get desktopWidgetLargeDateShape =>
       text().withDefault(const Constant('roundedRectangle'))();
   TextColumn get desktopWidgetTodayHighlightStyle =>

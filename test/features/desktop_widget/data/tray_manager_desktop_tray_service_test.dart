@@ -10,6 +10,7 @@ void main() {
       const AppPreferences(
         themeMode: AppThemePreference.dark,
         visualStyle: AppVisualStyle.glass,
+        desktopWidgetType: DesktopWidgetType.note,
         desktopWidgetSize: DesktopWidgetSize.large,
         desktopWidgetLargeDateShape: DesktopWidgetLargeDateShape.circle,
         desktopWidgetTodayHighlightStyle:
@@ -24,13 +25,27 @@ void main() {
       menu.items
           ?.where((item) => item.type == 'submenu')
           .map((item) => item.label),
-      ['快捷打开', '摆件尺寸', '大号日期样式', '当日突出样式', '显示层级', '透明度', '外观模式', '视觉风格'],
+      [
+        '快捷打开',
+        '摆件类型',
+        '摆件尺寸',
+        '大号日期样式',
+        '当日突出样式',
+        '显示层级',
+        '透明度',
+        '外观模式',
+        '视觉风格',
+      ],
     );
     for (final action in DesktopWidgetMenuAction.values) {
       expect(menu.getMenuItem(action.name), isNotNull, reason: action.name);
     }
     expect(
       menu.getMenuItem(DesktopWidgetMenuAction.large.name)?.checked,
+      isTrue,
+    );
+    expect(
+      menu.getMenuItem(DesktopWidgetMenuAction.typeNote.name)?.checked,
       isTrue,
     );
     expect(

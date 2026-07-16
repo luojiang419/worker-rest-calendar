@@ -114,6 +114,40 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 _SettingsSection(
                   title: '桌面摆件',
                   children: [
+                    _SegmentedSetting<DesktopWidgetType>(
+                      title: '摆件类型',
+                      description: '排班、时钟、记事本与专注计时器共享窗口外观和位置',
+                      selected: preferences.desktopWidgetType,
+                      enabled: !_saving,
+                      segments: const [
+                        ButtonSegment(
+                          value: DesktopWidgetType.schedule,
+                          icon: Icon(Icons.calendar_month_outlined),
+                          label: Text('排班'),
+                        ),
+                        ButtonSegment(
+                          value: DesktopWidgetType.clock,
+                          icon: Icon(Icons.schedule_rounded),
+                          label: Text('时钟'),
+                        ),
+                        ButtonSegment(
+                          value: DesktopWidgetType.note,
+                          icon: Icon(Icons.sticky_note_2_outlined),
+                          label: Text('记事'),
+                        ),
+                        ButtonSegment(
+                          value: DesktopWidgetType.focus,
+                          icon: Icon(Icons.timer_outlined),
+                          label: Text('专注'),
+                        ),
+                      ],
+                      onChanged: (value) => _apply(
+                        () => ref
+                            .read(desktopWidgetControllerProvider.notifier)
+                            .setType(value),
+                      ),
+                    ),
+                    const _SettingDivider(),
                     _SegmentedSetting<DesktopWidgetSize>(
                       title: '摆件尺寸',
                       selected: preferences.desktopWidgetSize,

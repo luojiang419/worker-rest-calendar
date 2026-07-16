@@ -21,6 +21,11 @@ void main() {
       DesktopWidgetLargeDateShape.roundedRectangle,
     );
     expect(
+      (await repository.getAppPreferences()).desktopWidgetType,
+      DesktopWidgetType.schedule,
+    );
+    expect((await repository.getAppPreferences()).desktopWidgetNote, isEmpty);
+    expect(
       (await repository.getAppPreferences()).desktopWidgetTodayHighlightStyle,
       DesktopWidgetTodayHighlightStyle.glowOutline,
     );
@@ -38,6 +43,8 @@ void main() {
         themeMode: AppThemePreference.dark,
         visualStyle: AppVisualStyle.paper,
         firstLaunchCompleted: true,
+        desktopWidgetType: DesktopWidgetType.note,
+        desktopWidgetNote: '明天提交周报',
         desktopWidgetLargeDateShape: DesktopWidgetLargeDateShape.circle,
         desktopWidgetTodayHighlightStyle:
             DesktopWidgetTodayHighlightStyle.filled,
@@ -59,6 +66,8 @@ void main() {
     expect(app.themeMode, AppThemePreference.dark);
     expect(app.visualStyle, AppVisualStyle.paper);
     expect(app.firstLaunchCompleted, isTrue);
+    expect(app.desktopWidgetType, DesktopWidgetType.note);
+    expect(app.desktopWidgetNote, '明天提交周报');
     expect(app.desktopWidgetLargeDateShape, DesktopWidgetLargeDateShape.circle);
     expect(
       app.desktopWidgetTodayHighlightStyle,

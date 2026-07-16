@@ -34,7 +34,9 @@ final class DriftSettingsRepository implements SettingsRepository {
           visualStyle: Value(preferences.visualStyle.name),
           locale: Value(preferences.locale),
           firstLaunchCompleted: Value(preferences.firstLaunchCompleted),
+          desktopWidgetType: Value(preferences.desktopWidgetType.name),
           desktopWidgetSize: Value(preferences.desktopWidgetSize.name),
+          desktopWidgetNote: Value(preferences.desktopWidgetNote),
           desktopWidgetLargeDateShape: Value(
             preferences.desktopWidgetLargeDateShape.name,
           ),
@@ -88,7 +90,9 @@ final class DriftSettingsRepository implements SettingsRepository {
     visualStyle: AppVisualStyle.values.byName(row.visualStyle),
     locale: row.locale,
     firstLaunchCompleted: row.firstLaunchCompleted,
+    desktopWidgetType: DesktopWidgetType.values.byName(row.desktopWidgetType),
     desktopWidgetSize: DesktopWidgetSize.values.byName(row.desktopWidgetSize),
+    desktopWidgetNote: row.desktopWidgetNote,
     desktopWidgetLargeDateShape: DesktopWidgetLargeDateShape.values.byName(
       row.desktopWidgetLargeDateShape,
     ),

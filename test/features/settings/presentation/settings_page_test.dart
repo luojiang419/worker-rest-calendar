@@ -60,6 +60,12 @@ void main() {
     expect(stored.desktopLaunchAtStartup, isTrue);
     expect(window.launchAtStartup, isTrue);
 
+    await tester.ensureVisible(find.text('时钟'));
+    await tester.tap(find.text('时钟'));
+    await tester.pumpAndSettle();
+    stored = await database.select(database.appSettings).getSingle();
+    expect(stored.desktopWidgetType, 'clock');
+
     await tester.ensureVisible(find.text('大'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('大'));

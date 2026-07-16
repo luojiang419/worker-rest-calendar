@@ -73,7 +73,7 @@ void main() {
 
     final backup = await backupDatabaseBeforeMigration(
       file,
-      currentSchemaVersion: 7,
+      currentSchemaVersion: 8,
     );
     expect(backup, isNotNull);
     expect(await backup!.exists(), isTrue);
@@ -95,7 +95,7 @@ void main() {
     final version = await database
         .customSelect('PRAGMA user_version')
         .getSingle();
-    expect(version.read<int>('user_version'), 7);
+    expect(version.read<int>('user_version'), 8);
   });
 
   test('v2 文件升级到最新版时补齐桌面启动、视觉风格和日期样式', () async {
@@ -132,10 +132,12 @@ void main() {
     expect(row.desktopWidgetLargeDateShape, 'roundedRectangle');
     expect(row.desktopWidgetTodayHighlightStyle, 'glowOutline');
     expect(row.calendarScrollAxis, 'horizontal');
+    expect(row.desktopWidgetType, 'schedule');
+    expect(row.desktopWidgetNote, isEmpty);
     final version = await database
         .customSelect('PRAGMA user_version')
         .getSingle();
-    expect(version.read<int>('user_version'), 7);
+    expect(version.read<int>('user_version'), 8);
   });
 
   test('v5 文件升级到最新版时为当日突出样式写入兼容默认值', () async {
@@ -176,9 +178,11 @@ void main() {
     expect(row.desktopWidgetLargeDateShape, 'circle');
     expect(row.desktopWidgetTodayHighlightStyle, 'glowOutline');
     expect(row.calendarScrollAxis, 'horizontal');
+    expect(row.desktopWidgetType, 'schedule');
+    expect(row.desktopWidgetNote, isEmpty);
     final version = await database
         .customSelect('PRAGMA user_version')
         .getSingle();
-    expect(version.read<int>('user_version'), 7);
+    expect(version.read<int>('user_version'), 8);
   });
 }

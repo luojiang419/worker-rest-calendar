@@ -4,6 +4,8 @@ enum AppThemePreference { system, light, dark }
 
 enum DesktopWidgetSize { small, medium, large }
 
+enum DesktopWidgetType { schedule, clock, note, focus }
+
 enum DesktopWidgetLargeDateShape { roundedRectangle, circle }
 
 enum DesktopWidgetTodayHighlightStyle { glowOutline, filled }
@@ -16,7 +18,9 @@ final class AppPreferences {
     this.visualStyle = AppVisualStyle.classic,
     this.locale = 'zh_CN',
     this.firstLaunchCompleted = false,
+    this.desktopWidgetType = DesktopWidgetType.schedule,
     this.desktopWidgetSize = DesktopWidgetSize.small,
+    this.desktopWidgetNote = '',
     this.desktopWidgetLargeDateShape =
         DesktopWidgetLargeDateShape.roundedRectangle,
     this.desktopWidgetTodayHighlightStyle =
@@ -32,7 +36,9 @@ final class AppPreferences {
   final AppVisualStyle visualStyle;
   final String locale;
   final bool firstLaunchCompleted;
+  final DesktopWidgetType desktopWidgetType;
   final DesktopWidgetSize desktopWidgetSize;
+  final String desktopWidgetNote;
   final DesktopWidgetLargeDateShape desktopWidgetLargeDateShape;
   final DesktopWidgetTodayHighlightStyle desktopWidgetTodayHighlightStyle;
   final double desktopWidgetOpacity;
@@ -46,7 +52,9 @@ final class AppPreferences {
     AppVisualStyle? visualStyle,
     String? locale,
     bool? firstLaunchCompleted,
+    DesktopWidgetType? desktopWidgetType,
     DesktopWidgetSize? desktopWidgetSize,
+    String? desktopWidgetNote,
     DesktopWidgetLargeDateShape? desktopWidgetLargeDateShape,
     DesktopWidgetTodayHighlightStyle? desktopWidgetTodayHighlightStyle,
     double? desktopWidgetOpacity,
@@ -59,7 +67,9 @@ final class AppPreferences {
     visualStyle: visualStyle ?? this.visualStyle,
     locale: locale ?? this.locale,
     firstLaunchCompleted: firstLaunchCompleted ?? this.firstLaunchCompleted,
+    desktopWidgetType: desktopWidgetType ?? this.desktopWidgetType,
     desktopWidgetSize: desktopWidgetSize ?? this.desktopWidgetSize,
+    desktopWidgetNote: desktopWidgetNote ?? this.desktopWidgetNote,
     desktopWidgetLargeDateShape:
         desktopWidgetLargeDateShape ?? this.desktopWidgetLargeDateShape,
     desktopWidgetTodayHighlightStyle:

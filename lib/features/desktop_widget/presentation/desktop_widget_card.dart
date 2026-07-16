@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:worker_rest_calendar/core/theme/app_tokens.dart';
 import 'package:worker_rest_calendar/core/theme/app_visual_style.dart';
-import 'package:worker_rest_calendar/core/widgets/app_card.dart';
 import 'package:worker_rest_calendar/features/desktop_widget/domain/desktop_widget_snapshot.dart';
 import 'package:worker_rest_calendar/features/desktop_widget/presentation/desktop_widget_date_surface.dart';
+import 'package:worker_rest_calendar/features/desktop_widget/presentation/desktop_widget_frame.dart';
 import 'package:worker_rest_calendar/features/schedule/application/day_presentation.dart';
 import 'package:worker_rest_calendar/features/schedule/domain/day_kind.dart';
 import 'package:worker_rest_calendar/features/schedule/presentation/day_visuals.dart';
@@ -28,41 +28,23 @@ class DesktopWidgetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final desktopShadows = tokens.shadows.medium.isEmpty
-        ? AppTokens.resolve(
-            AppVisualStyle.classic,
-            Theme.of(context).brightness,
-          ).shadows.medium
-        : tokens.shadows.medium;
-    return Material(
-      type: MaterialType.transparency,
-      child: Padding(
-        key: const ValueKey('desktop-widget-shadow-safe-area'),
-        padding: const EdgeInsets.all(8),
-        child: AppCard(
-          key: ValueKey('desktop-widget-card-${tokens.visualStyle.name}'),
-          showBorder: false,
-          boxShadow: desktopShadows,
-          padding: EdgeInsets.all(
-            size == DesktopWidgetSize.large
-                ? tokens.spacing.md
-                : tokens.spacing.sm + tokens.spacing.xs,
-          ),
-          child: switch (size) {
-            DesktopWidgetSize.small => _SmallSnapshot(snapshot: snapshot),
-            DesktopWidgetSize.medium => _MediumSnapshot(
-              snapshot: snapshot,
-              todayHighlightStyle: todayHighlightStyle,
-            ),
-            DesktopWidgetSize.large => _LargeSnapshot(
-              snapshot: snapshot,
-              dateShape: largeDateShape,
-              todayHighlightStyle: todayHighlightStyle,
-              onOpenDate: onOpenDate,
-            ),
-          },
+    return DesktopWidgetFrame(
+      size: size,
+      cardKey: ValueKey('desktop-widget-card-${tokens.visualStyle.name}'),
+      shadowSafeAreaKey: const ValueKey('desktop-widget-shadow-safe-area'),
+      child: switch (size) {
+        DesktopWidgetSize.small => _SmallSnapshot(snapshot: snapshot),
+        DesktopWidgetSize.medium => _MediumSnapshot(
+          snapshot: snapshot,
+          todayHighlightStyle: todayHighlightStyle,
         ),
-      ),
+        DesktopWidgetSize.large => _LargeSnapshot(
+          snapshot: snapshot,
+          dateShape: largeDateShape,
+          todayHighlightStyle: todayHighlightStyle,
+          onOpenDate: onOpenDate,
+        ),
+      },
     );
   }
 }
