@@ -9,6 +9,7 @@ import 'package:worker_rest_calendar/core/date/calendar_date.dart';
 import 'package:worker_rest_calendar/core/theme/app_theme.dart';
 import 'package:worker_rest_calendar/core/widgets/app_card.dart';
 import 'package:worker_rest_calendar/features/calendar/application/calendar_controller.dart';
+import 'package:worker_rest_calendar/features/calendar/presentation/day_sheets.dart';
 import 'package:worker_rest_calendar/features/home/presentation/home_page.dart';
 import 'package:worker_rest_calendar/features/schedule/data/drift_schedule_repository.dart';
 import 'package:worker_rest_calendar/features/schedule/domain/day_kind.dart';
@@ -51,7 +52,22 @@ void main() {
 
     final todayCell = find.bySemanticsLabel(RegExp(r'2026年7月11日 周六，休息，今天'));
     expect(todayCell, findsOneWidget);
+    final calendar = ProviderScope.containerOf(tester.element(todayCell));
+    calendar.read(calendarControllerProvider.notifier).selectDate(
+      CalendarDate(2026, 7, 12),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(todayCell);
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.text('编辑当天'), findsNothing);
+    expect(find.byType(DayDetailsSheet), findsNothing);
+    expect(find.byType(DayEditorSheet), findsNothing);
+    expect(
+      calendar.read(calendarControllerProvider).selectedDate,
+      CalendarDate(2026, 7, 11),
+    );
+    await _doubleTap(tester, todayCell);
     await tester.pumpAndSettle();
     expect(find.text('编辑当天'), findsOneWidget);
 
@@ -74,7 +90,10 @@ void main() {
       findsOneWidget,
     );
 
-    await tester.tap(find.bySemanticsLabel(RegExp(r'7月11日.*调休上班.*已手动调整')));
+    await _doubleTap(
+      tester,
+      find.bySemanticsLabel(RegExp(r'7月11日.*调休上班.*已手动调整')),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('删除当天调整'));
     await tester.pumpAndSettle();
@@ -304,6 +323,12 @@ void main() {
     await tester.pump();
     await database.close();
   });
+}
+
+Future<void> _doubleTap(WidgetTester tester, Finder finder) async {
+  await tester.tap(finder);
+  await tester.pump(const Duration(milliseconds: 50));
+  await tester.tap(finder);
 }
 
 Future<void> _pumpUntilFound(WidgetTester tester, Finder finder) async {

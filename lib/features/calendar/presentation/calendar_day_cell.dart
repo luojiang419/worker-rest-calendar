@@ -13,6 +13,7 @@ class CalendarDayCell extends StatelessWidget {
     required this.isSelected,
     required this.isInDisplayedMonth,
     required this.onTap,
+    required this.onDoubleTap,
     required this.onLongPress,
     super.key,
   });
@@ -22,6 +23,7 @@ class CalendarDayCell extends StatelessWidget {
   final bool isSelected;
   final bool isInDisplayedMonth;
   final VoidCallback onTap;
+  final VoidCallback onDoubleTap;
   final VoidCallback onLongPress;
 
   @override
@@ -53,6 +55,7 @@ class CalendarDayCell extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
+            onDoubleTap: onDoubleTap,
             onLongPress: onLongPress,
             borderRadius: BorderRadius.circular(tokens.radius.sm),
             child: AnimatedContainer(

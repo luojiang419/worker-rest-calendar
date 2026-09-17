@@ -483,6 +483,9 @@ class _CalendarGridCard extends StatelessWidget {
                           day.date.month == calendar.displayedDate.month,
                       onTap: () {
                         controller.selectDate(day.date);
+                      },
+                      onDoubleTap: () {
+                        controller.selectDate(day.date);
                         onOpenDay(day.date);
                       },
                       onLongPress: () {
