@@ -19,6 +19,12 @@
 - `windows_taskbar_close_test.dart`：Windows 原生测试通过，覆盖普通窗口与最小化窗口的 `WM_SYSCOMMAND / SC_CLOSE`、摆件尺寸、窗口可见性与任务栏跳过状态。
 - `windows_android_release_flow_test.dart`：原有 Windows 发布流程集成测试通过。
 - 两个集成测试单独执行时临时使用各自独立的原生 mutex 和窗口属性名称，避开正在运行的安装版；每次结束均恢复源码标识。批量执行曾出现测试进程交接失败，因此最终分别运行验证。
-- Windows Debug 与 Release 构建通过。当前安装版未替换。
+- Windows Debug 与 Release 构建通过。
 
 全库格式检查另发现原有 `calendar_flow_test.dart` 需要格式化，本次保留其原文。
+
+## 本地安装更新（2026-10-20）
+
+按用户要求更新至当前用户的 `AppData/Local/Programs/工作日历`。沿用已安装版的 `0.1.14` 版本号（本机构建标识为 `0.1.14+0`），替换 12 个变化文件，全部 25 个程序文件的 SHA-256 与构建输出一致；保留卸载程序及用户设置。
+
+安装版已重新启动，单实例与摆件内容正常。数据库 schema 保持 v9，`PRAGMA quick_check` 返回 `ok`；排班、单日覆盖与提醒记录数量均与更新前一致。替换文件和停机后的用户数据副本保存在本机 `.dart_tool/local-install-rollback-20261020-c9d7dbe8`，未提交用户数据。
