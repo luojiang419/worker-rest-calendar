@@ -14,6 +14,7 @@ void main() {
   final calls = <MethodCall>[];
   var windowBounds = const Rect.fromLTWH(0, 0, 1100, 720);
   var display = _display(width: 1920, height: 1040);
+  var minimized = false;
 
   WindowManagerDesktopWindowService createService({
     FakeDesktopDisplayConfigurationService? displayConfiguration,
@@ -33,6 +34,7 @@ void main() {
     calls.clear();
     windowBounds = const Rect.fromLTWH(0, 0, 1100, 720);
     display = _display(width: 1920, height: 1040);
+    minimized = false;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, (call) async {
           calls.add(call);
@@ -53,7 +55,7 @@ void main() {
               'width': windowBounds.width,
               'height': windowBounds.height,
             },
-            'isMinimized' => false,
+            'isMinimized' => minimized,
             _ => true,
           };
         });
@@ -85,6 +87,25 @@ void main() {
       'backgroundColorB': 0,
     });
   });
+
+  for (final wasMinimized in [false, true]) {
+    test('Windows 摆件在显示恢复并激活后移除任务栏按钮：$wasMinimized', () async {
+      minimized = wasMinimized;
+      final service = createService();
+
+      await service.showWidget(DesktopWidgetSize.small);
+
+      final methods = calls.map((call) => call.method).toList();
+      final skipIndex = methods.lastIndexOf('setSkipTaskbar');
+      expect(skipIndex, greaterThan(methods.indexOf('show')));
+      expect(skipIndex, greaterThan(methods.indexOf('focus')));
+      if (wasMinimized) {
+        expect(methods, contains('restore'));
+        expect(skipIndex, greaterThan(methods.indexOf('restore')));
+      }
+      expect(calls[skipIndex].arguments, {'isSkipTaskbar': true});
+    });
+  }
 
   test('退出先隐藏窗口再解除关闭拦截并销毁且只执行一次', () async {
     final service = createService();

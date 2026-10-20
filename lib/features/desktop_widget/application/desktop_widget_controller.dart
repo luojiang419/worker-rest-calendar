@@ -275,7 +275,9 @@ final class DesktopWidgetController extends AsyncNotifier<DesktopWidgetState> {
       openFullApp(selectedDate: intent.selectedDate);
 
   Future<void> _handleWindowClose() async {
-    if (!state.hasValue || !state.requireValue.showFullApp) return;
+    if (!state.hasValue || _exitOperation != null) return;
+    // Also repair a widget window left on the taskbar by Windows activation.
+    // Ignoring its close request leaves the taskbar's Close window ineffective.
     await returnToWidget();
   }
 

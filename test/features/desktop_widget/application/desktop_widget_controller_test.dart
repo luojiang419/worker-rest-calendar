@@ -152,6 +152,50 @@ void main() {
     expect(window.exited, isTrue);
   });
 
+  test('摆件残留任务栏按钮的关闭请求恢复摆件且退出期间不重新打开', () async {
+    final database = AppDatabase(NativeDatabase.memory());
+    final window = _FakeDesktopWindowService();
+    final tray = _FakeDesktopTrayService();
+    final container = ProviderContainer(
+      overrides: [
+        appDatabaseProvider.overrideWithValue(database),
+        desktopActivationServiceProvider.overrideWithValue(
+          _FakeDesktopActivationService(),
+        ),
+        desktopWindowServiceProvider.overrideWithValue(window),
+        desktopTrayServiceProvider.overrideWithValue(tray),
+      ],
+    );
+    addTearDown(() async {
+      container.dispose();
+      await database.close();
+    });
+
+    await container.read(desktopWidgetControllerProvider.future);
+    expect(window.widgetShowCount, 1);
+
+    await window.requestClose();
+
+    expect(window.widgetShowCount, 2);
+    expect(
+      container.read(desktopWidgetControllerProvider).requireValue.showFullApp,
+      isFalse,
+    );
+    expect(tray.visible, isTrue);
+    expect(window.exited, isFalse);
+
+    await container
+        .read(desktopWidgetControllerProvider.notifier)
+        .openFullApp();
+    await window.requestClose();
+    expect(window.widgetShowCount, 3);
+    expect(window.exited, isFalse);
+
+    await container.read(desktopWidgetControllerProvider.notifier).exit();
+    await window.requestClose();
+    expect(window.widgetShowCount, 3);
+  });
+
   test('启动期激活参数在控制器就绪前保留并直接打开目标日期', () async {
     final database = AppDatabase(NativeDatabase.memory());
     final activation = _FakeDesktopActivationService(
@@ -318,6 +362,7 @@ final class _FakeDesktopWindowService implements DesktopWindowService {
   bool? desktopLayer;
   bool fullAppShown = false;
   int fullAppShowCount = 0;
+  int widgetShowCount = 0;
   bool? lastFullAppConfigure;
   bool exited = false;
   int exitCallCount = 0;
@@ -334,7 +379,10 @@ final class _FakeDesktopWindowService implements DesktopWindowService {
   }
 
   @override
-  Future<void> showWidget(DesktopWidgetSize size) async => lastSize = size;
+  Future<void> showWidget(DesktopWidgetSize size) async {
+    lastSize = size;
+    widgetShowCount += 1;
+  }
 
   @override
   Future<void> showFullApp({bool configure = true}) async {

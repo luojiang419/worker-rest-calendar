@@ -89,12 +89,14 @@ final class WindowManagerDesktopWindowService extends WindowListener
     await windowManager.setSize(windowSize, animate: true);
     await windowManager.setMinimumSize(windowSize);
     await windowManager.setMaximumSize(windowSize);
-    await windowManager.setSkipTaskbar(_isWindows);
     await _restoreWidgetPosition(windowSize);
     final wasMinimized = await windowManager.isMinimized();
     await windowManager.show();
     if (wasMinimized) await windowManager.restore();
     await windowManager.focus();
+    // Show/restore can add the HWND back to the Windows taskbar. Remove it
+    // only after the widget is visible and its activation has completed.
+    await windowManager.setSkipTaskbar(_isWindows);
   }
 
   @override
