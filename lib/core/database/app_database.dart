@@ -1,0 +1,118 @@
+import 'package:drift/drift.dart';
+import 'package:worker_rest_calendar/core/database/tables.dart';
+
+part 'app_database.g.dart';
+
+const appDatabaseSchemaVersion = 9;
+
+@DriftDatabase(
+  tables: [
+    ScheduleProfiles,
+    DayOverrides,
+    HolidayOverrides,
+    ReminderSettings,
+    AppSettings,
+    SyncQueue,
+  ],
+)
+final class AppDatabase extends _$AppDatabase {
+  AppDatabase(super.executor);
+
+  @override
+  int get schemaVersion => appDatabaseSchemaVersion;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (migrator) async {
+      await migrator.createAll();
+      await _ensureSingletonSettings();
+    },
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) {
+        await migrator.createTable(holidayOverrides);
+        await migrator.createTable(reminderSettings);
+        await migrator.createTable(appSettings);
+        await migrator.createTable(syncQueue);
+        await _ensureSingletonSettings();
+      }
+      if (from >= 2 && from < 3) {
+        await migrator.addColumn(
+          appSettings,
+          appSettings.desktopLaunchAtStartup,
+        );
+      }
+      if (from >= 2 && from < 4) {
+        await migrator.addColumn(appSettings, appSettings.visualStyle);
+      }
+      if (from >= 2 && from < 5) {
+        await migrator.addColumn(
+          appSettings,
+          appSettings.desktopWidgetLargeDateShape,
+        );
+      }
+      if (from >= 2 && from < 6) {
+        await migrator.addColumn(
+          appSettings,
+          appSettings.desktopWidgetTodayHighlightStyle,
+        );
+      }
+      if (from >= 2 && from < 7) {
+        await migrator.addColumn(appSettings, appSettings.calendarScrollAxis);
+      }
+      if (from >= 2 && from < 8) {
+        await migrator.addColumn(appSettings, appSettings.desktopWidgetType);
+        await migrator.addColumn(appSettings, appSettings.desktopWidgetNote);
+      }
+      if (from >= 2 && from < 9) {
+        final existingColumns = (await customSelect(
+          'PRAGMA table_info(app_settings)',
+        ).get()).map((row) => row.read<String>('name')).toSet();
+        if (!existingColumns.contains(
+          appSettings.desktopWidgetCountdownTitle.$name,
+        )) {
+          await migrator.addColumn(
+            appSettings,
+            appSettings.desktopWidgetCountdownTitle,
+          );
+        }
+        if (!existingColumns.contains(
+          appSettings.desktopWidgetCountdownDate.$name,
+        )) {
+          await migrator.addColumn(
+            appSettings,
+            appSettings.desktopWidgetCountdownDate,
+          );
+        }
+        if (!existingColumns.contains(
+          appSettings.desktopWidgetTodosJson.$name,
+        )) {
+          await migrator.addColumn(
+            appSettings,
+            appSettings.desktopWidgetTodosJson,
+          );
+        }
+        if (!existingColumns.contains(
+          appSettings.desktopWidgetWeatherCity.$name,
+        )) {
+          await migrator.addColumn(
+            appSettings,
+            appSettings.desktopWidgetWeatherCity,
+          );
+        }
+      }
+    },
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
+  );
+
+  Future<void> _ensureSingletonSettings() async {
+    await into(reminderSettings).insert(
+      const ReminderSettingsCompanion(),
+      mode: InsertMode.insertOrIgnore,
+    );
+    await into(
+      appSettings,
+    ).insert(const AppSettingsCompanion(), mode: InsertMode.insertOrIgnore);
+  }
+}
