@@ -1,0 +1,38 @@
+# 自动更新与发布契约
+
+## 当前固定项
+
+- 平台：Windows x64。
+- 正式版本：三段 SemVer，标签为 `vMAJOR.MINOR.PATCH`。
+- 当前版本来源：云端发布任务计算的 `VERSION`；同一值注入 Flutter build name、Inno Setup、标签和资产名。Windows 文件 `ProductVersion` 按 Flutter 规则显示为 `{VERSION}+{buildNumber}`，客户端比较只使用 `VERSION`。
+- 公开源码与 Release 仓库：`luojiang419/worker-rest-calendar`。
+- Latest API：`https://api.github.com/repos/luojiang419/worker-rest-calendar/releases/latest`。
+- 安装包：`worker-rest-calendar-Setup-Windows-x64-v{version}.exe`。
+- 校验文件：安装包文件名追加 `.sha256`，内容为安装包 SHA-256 和文件名。
+- 安装范围：当前用户的 `%LOCALAPPDATA%\\Programs\\工作日历`，无需管理员权限。
+- 静默参数：Inno Setup `/SP- /SILENT /SUPPRESSMSGBOXES /NORESTART /NOCANCEL /CLOSEAPPLICATIONS /FORCECLOSEAPPLICATIONS /DIR=... /LOG=...`。`/SILENT` 保留独立安装进度窗口，禁止改回隐藏进度窗口的 `/VERYSILENT`。
+- 完整性：客户端必须同时验证 Release 声明大小和 `.sha256`；不精确、不唯一、空地址、零大小或摘要不一致时拒绝安装。
+- 签名：当前无 Authenticode 证书，CI 明确记录 `NotSigned`，不会将其描述为公共可信安装包。
+
+## 独立安装进度协议
+
+- 独立 helper 负责等待旧程序退出、以 `/SILENT` 启动 Inno Setup、检查退出码、记录日志和启动新版；安装进度窗口由 Inno Setup 自己显示，避免重复实现第二套进度协议。
+- 安装窗口标题持续显示 `工作日历更新 - {percent}%`，正文显示目标版本、当前安装动作和正在处理的文件，原生进度条与百分比使用同一真实进度源。
+- 百分比由 `CurInstallProgressChanged(CurProgress, MaxProgress)` 计算并限制在 0–100；`ssPostInstall` 阶段明确显示 100%。
+- `/NOCANCEL` 与 `AllowCancelDuringInstall=no` 共同禁止安装中断，避免旧文件已替换但新文件未完成的半安装状态。
+- 安装器返回非零退出码时，由独立 helper 显示失败原因；更新器日志与 Inno 安装日志继续保留供诊断。
+- 自更新引导边界：首次升级到包含本改动的版本时，仍由旧 helper 传入 `/VERYSILENT`；安装该版本后的下一次升级才会显示新的百分比窗口。
+
+## 远端策略
+
+用户已确认使用公开仓库。源码、Actions 与公开 Release 统一位于 `luojiang419/worker-rest-calendar`，本地 `main` 跟踪 `origin/main`。客户端不得内置 GitHub 令牌。
+
+首个更新基线版本为 `v0.1.11`，由 Actions run `29467745778` 构建并于 2026-07-16 正式发布；Release、标签与 `main` 均指向提交 `b36fd7ff55f52a013711f26c8d974618b5612593`。安装包资产大小为 12160858 字节，SHA-256 为 `eab8446c90388da419a7004b877733596748a50eb4983102ab352835cc847147`。
+
+## 首次真实升级顺序
+
+1. 云端发布首个具备更新能力的版本。
+2. 用该云端安装包覆盖本机现有无更新能力版本。
+3. 云端发布更高补丁版本。
+4. 由已安装客户端通过 Latest API 检测、下载、校验、提示、静默覆盖并重启。
+5. 验证新版运行时版本、安装器版本、标签、资产和提交完全一致。

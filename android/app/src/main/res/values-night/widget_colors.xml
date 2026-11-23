@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_surface">#FF171C23</color>
+    <color name="widget_text_primary">#FFF6F7F9</color>
+    <color name="widget_text_secondary">#FFA8B0BB</color>
+    <color name="widget_cell_surface">#FF252D38</color>
+    <color name="widget_work">#FF94A3B8</color>
+    <color name="widget_rest">#FF49D49B</color>
+    <color name="widget_adjusted_work">#FFFFAD4D</color>
+    <color name="widget_adjusted_rest">#FF36C2B4</color>
+    <color name="widget_leave">#FFAA98FF</color>
+</resources>

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "profile": {
+    "id": "example-big-small-week",
+    "name": "我的大小周",
+    "patternType": "alternatingBigSmallWeek",
+    "anchorMonday": "2026-07-06",
+    "anchorWeekType": "big",
+    "holidayOverridesEnabled": true
+  },
+  "manualOverrides": [
+    {
+      "date": "2026-07-11",
+      "kind": "adjustedWork",
+      "note": "临时项目支持",
+      "overtimeMinutes": 0
+    },
+    {
+      "date": "2026-07-18",
+      "kind": "adjustedRest",
+      "note": "补休",
+      "overtimeMinutes": 0
+    },
+    {
+      "date": "2026-07-22",
+      "kind": "leave",
+      "note": "年假",
+      "overtimeMinutes": 0
+    },
+    {
+      "date": "2026-07-24",
+      "kind": "work",
+      "note": "",
+      "overtimeMinutes": 120
+    }
+  ]
+}
